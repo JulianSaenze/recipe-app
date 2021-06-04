@@ -1,0 +1,18 @@
+<app-header (featureSelected)="onNavigate($event)"></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <app-recipes *ngIf="loadedFeature === 'recipe'"></app-recipes>
+      <app-shopping-list *ngIf="loadedFeature !== 'recipe'"></app-shopping-list>
+    </div>
+    <!-- <div>
+      <app-lifecycle-hooks
+        [a]="inputValue"
+        [b]="inputValue"
+        *ngIf="showComponent">
+      </app-lifecycle-hooks></div>
+
+      <input [(ngModel)]="inputValue">
+      <button (click)="showComponent != showComponent">Show/Hide Component</button>
+  </div> -->
+</div>
