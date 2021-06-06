@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { Recipe } from './recipe.model';
 import { RecipeService } from './recipe.service';
@@ -12,7 +13,8 @@ import { RecipeService } from './recipe.service';
 export class RecipesComponent implements OnInit {
   selectedRecipe: Recipe;
 
-  constructor(private recipeService: RecipeService) { }
+  constructor(private recipeService: RecipeService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     //setup listener - get informed about any changes
@@ -21,6 +23,12 @@ export class RecipesComponent implements OnInit {
           this.selectedRecipe = recipe;
         }
       );
+      //TODO: update url with currently selected name of recipe
+      // this.route.params.subscribe(
+      //   (params: Params) => {
+      //     this.selectedRecipe.name = params['name'];
+      //   }
+      // );
   }
 
 }
