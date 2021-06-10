@@ -23,12 +23,6 @@ export class RecipesComponent implements OnInit {
           this.selectedRecipe = recipe;
         }
       );
-      //TODO: update url with currently selected name of recipe
-      // this.route.params.subscribe(
-      //   (params: Params) => {
-      //     this.selectedRecipe.name = params['name'];
-      //   }
-      // );
   }
 
 }
