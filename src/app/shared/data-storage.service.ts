@@ -9,7 +9,7 @@ export class DataStorageService{
   url = 'https://ng-recipe-book-44aae-default-rtdb.europe-west1.firebasedatabase.app/recipes.json';
   constructor(private http: HttpClient, private recipesService: RecipeService){}
 
-  //post vs put: post creates ID from Angular. put assumes you what you are putting (normal array indexes)
+  //post vs put: post creates ID from Angular. put assumes you know what you are putting and create normal array indexes
   storeRecipes() {
     const recipes = this.recipesService.getRecipes();
     this.http.put(this.url, recipes)
@@ -25,7 +25,7 @@ export class DataStorageService{
   fetchRecipes(){
     return this.http
       .get<Recipe[]>(this.url)
-      //make sure that data that is loaded has ingredients
+      //make sure that data that is loaded has ingredients and is not undefined / at least has an empty ingredients array
       .pipe(map(recipes => {
         return recipes.map(recipe => {
           //...recipe -> to copy existing data, set ingredients equal to wether recipe.ingredients is true (has elements), else set it to an empty array
@@ -37,6 +37,7 @@ export class DataStorageService{
       }),
       tap(recipes => {
         this.recipesService.setRecipes(recipes);
+        console.log(recipes);
       })
       );
   }
