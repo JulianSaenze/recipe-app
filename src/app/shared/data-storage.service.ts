@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { RecipeService } from "../recipes/recipe.service";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Recipe } from "../recipes/recipe.model";
+import { map } from "rxjs/operator";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService{
@@ -18,9 +18,20 @@ export class DataStorageService{
       });
   }
 
+  //pipe(map()) is a rxjs operator, recipes.map() is a js array method
+  //pipe(map()) transforms elements in an array, takes anonymous function which is executed for every element in the array (for every recipe)
+  //and return the transformed recipe. Second return, should return the original recipe, but if that recipe does not have an ingredients array
+  //set the ingredients to an empty array instead
   fetchRecipes(){
     this.http
       .get<Recipe[]>(this.url)
+      //make sure that data that is loaded has ingredients
+      .pipe(map(recipes => {
+        return recipes.map(recipe => {
+          //...recipe -> to copy existing data, set ingredients equal to wether recipe.ingredients is true (has elements), else set it to an empty array
+          return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+        });
+      }))
       .subscribe(recipes => {
         this.recipesService.setRecipes(recipes);
       })
