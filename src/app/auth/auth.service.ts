@@ -6,7 +6,7 @@ import { throwError } from "rxjs";
 //good practice to define the data you are working with
 //Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password for signing up
 //... https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password for signing/login in
-interface AuthResponseData {
+export interface AuthResponseData {
   kind: string;
   idToken: string;
   email: string;
