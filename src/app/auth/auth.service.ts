@@ -1,5 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { catchError } from "rxjs/operators";
+import { throwError } from "rxjs";
 
 //good practice to define the data you are working with
 //Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
@@ -25,7 +27,19 @@ export class AuthService {
         password: password,
         returnSecureToken: true
       }
-    );
+    ).pipe(
+        catchError(errorResponse => {
+      let errorMessage = "An unknown error occurred!";
+      if(!errorResponse.error || !errorResponse.error.error){
+        return throwError(errorMessage);
+      }
+      //handling logic / errors not the best place to do in the component
+      switch (errorResponse.error.error.message) {
+        case 'EMAIL_EXISTS':
+          errorMessage = "This email exists already";
+      }
+      return throwError(errorMessage);
+    }));
   }
 
 }
