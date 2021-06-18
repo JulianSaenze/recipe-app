@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+import { Subject, throwError } from "rxjs";
+import { User } from "./user.model";
 
 //good practice to define the data you are working with
 export interface AuthResponseData {
@@ -17,6 +18,8 @@ export interface AuthResponseData {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+
+  user = new Subject<User>();
 
   constructor(private http: HttpClient) {}
   //Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password for signing up
@@ -42,8 +45,25 @@ export class AuthService {
       password: password,
       returnSecureToken: true
     }
-    ).pipe(
-      catchError(this.handleError));
+    ).pipe(catchError(this.handleError), tap(responseData => {
+      this.handleAuthentication(
+        responseData.email,
+        responseData.localId,
+        responseData.idToken,
+        +responseData.expiresIn)
+    }));
+  }
+
+  private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+      const user = new User(
+        email,
+        userId,
+        token,
+        expirationDate
+      );
+      //emit this as the now logged in user
+      this.user.next(user);
   }
 
   private handleError(errorResponse: HttpErrorResponse){
