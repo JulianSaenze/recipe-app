@@ -4,8 +4,6 @@ import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 
 //good practice to define the data you are working with
-//Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password for signing up
-//... https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password for signing/login in
 export interface AuthResponseData {
   kind: string;
   idToken: string;
@@ -21,6 +19,7 @@ export interface AuthResponseData {
 export class AuthService {
 
   constructor(private http: HttpClient) {}
+  //Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password for signing up
 
   signUp(email: string, password: string) {
     return this.http.post<AuthResponseData>(
@@ -30,8 +29,25 @@ export class AuthService {
         password: password,
         returnSecureToken: true
       }
+      ).pipe(
+        catchError(this.handleError));
+  }
+
+  //... https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password for signing/login in
+  login(email: string, password: string) {
+    return this.http.post<AuthResponseData>(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCMB7UyYC1QDLXGCPaUEkp3YcWiyr9iR6g',
+    {
+      email: email,
+      password: password,
+      returnSecureToken: true
+    }
     ).pipe(
-        catchError(errorResponse => {
+      catchError(this.handleError));
+  }
+
+  private handleError(errorResponse: HttpErrorResponse){
+
       let errorMessage = "An unknown error occurred!";
       if(!errorResponse.error || !errorResponse.error.error){
         return throwError(errorMessage);
@@ -40,19 +56,15 @@ export class AuthService {
       switch (errorResponse.error.error.message) {
         case 'EMAIL_EXISTS':
           errorMessage = "This email exists already";
+          break;
+        case 'EMAIL_NOT_FOUND':
+          errorMessage = "This e-mail does not exist";
+          break;
+        case 'INVALID_PASSWORD':
+          errorMessage = "This password is not correct";
+          break;
       }
       return throwError(errorMessage);
-    }));
-  }
-
-  login(email: string, password: string) {
-    return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCMB7UyYC1QDLXGCPaUEkp3YcWiyr9iR6g',
-    {
-      email: email,
-      password: password,
-      returnSecureToken: true
-    }
-    )
   }
 
 }
