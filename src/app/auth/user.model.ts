@@ -1,3 +1,5 @@
+//token expires within an hour after creating it
+//always create a new user object when user logs in
 export class User {
   constructor(
     public email: string,

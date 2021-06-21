@@ -11,11 +11,11 @@ import { ShoppingListComponent } from "./shopping-list/shopping-list.component";
 const routes: Routes = [
   //only redirect if the full path is empty
   {path: '', redirectTo: '/recipes', pathMatch: 'full'},
-  {path: 'recipes', component: RecipesComponent, resolve: [RecipeResolverService], children: [
+  {path: 'recipes', component: RecipesComponent, children: [
     {path: '', component: RecipeStartComponent},
     {path: 'new', component: RecipeEditComponent},
-    {path: ':id', component: RecipeDetailComponent},
-    {path: ':id/edit', component: RecipeEditComponent}
+    {path: ':id', component: RecipeDetailComponent, resolve: [RecipeResolverService]},
+    {path: ':id/edit', component: RecipeEditComponent, resolve: [RecipeResolverService]}
   ]},
   // {path: 'recipes:name', component: ShoppingListComponent},
   {path: 'shopping-list', component: ShoppingListComponent},

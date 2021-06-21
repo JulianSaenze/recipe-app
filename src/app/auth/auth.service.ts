@@ -19,6 +19,7 @@ export interface AuthResponseData {
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
+  //emit new user whenever a user logs in or logs out
   user = new Subject<User>();
 
   constructor(private http: HttpClient) {}
@@ -55,6 +56,7 @@ export class AuthService {
   }
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+    //expiresIn holds a string of a number in seconds when the ID token expires / * 1000 convert into ms / new Date at the beginning converts it into time stamp (no ms)
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
       const user = new User(
         email,
