@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, tap } from "rxjs/operators";
-import { Subject, throwError } from "rxjs";
+import { BehaviorSubject, throwError } from "rxjs";
 import { User } from "./user.model";
 
 //good practice to define the data you are working with
@@ -20,7 +20,9 @@ export interface AuthResponseData {
 export class AuthService {
 
   //emit new user whenever a user logs in or logs out
-  user = new Subject<User>();
+  //BehaviorSubject behaves like a Subject - call next to emit a value and subscribe to it go get informed about new values
+  //Difference is that BehaviorSubject gives access to the previous emitted Subject
+  user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) {}
   //Look up Endpoint / Request Body Payload / Response Payload at https://firebase.google.com/docs/reference/rest/auth#section-create-email-password for signing up
