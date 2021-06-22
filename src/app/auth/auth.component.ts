@@ -42,6 +42,7 @@ export class AuthComponent {
     //cleaner code and no duplicate code -> create Observable and assigning login or singUp
     //executed code is the same
     authObservable.subscribe(responseData => {
+      console.log('authObservable responseData: ');
       console.log(responseData);
       this.isLoading = false;
       this.router.navigate(['/recipes']);
