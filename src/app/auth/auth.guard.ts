@@ -10,6 +10,7 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService,
               private router: Router){}
 
+              //to check if desired route can be activated. Returns true if it can. A UrlTree with a redirection to another route
               canActivate(
                 route: ActivatedRouteSnapshot,
                 router: RouterStateSnapshot
@@ -19,7 +20,9 @@ export class AuthGuard implements CanActivate {
                 | Promise<boolean | UrlTree>
                 | Observable<boolean | UrlTree> {
                 return this.authService.user.pipe(
+                  //takes the first emitted user
                   take(1),
+                  //A function that returns an Observable that emits the values from the source Observable transformed by the given project function.
                   map(user => {
                     const isAuth = !!user;
                     if (isAuth) {
@@ -27,11 +30,6 @@ export class AuthGuard implements CanActivate {
                     }
                     return this.router.createUrlTree(['/auth']);
                   })
-                  // tap(isAuth => {
-                  //   if (!isAuth) {
-                  //     this.router.navigate(['/auth']);
-                  //   }
-                  // })
                 );
               }
 }

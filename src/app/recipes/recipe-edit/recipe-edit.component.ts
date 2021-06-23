@@ -33,10 +33,6 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit(){
-    // const newRecipe = new Recipe(this.recipeForm.value['name'],
-    //                              this.recipeForm.value['description'],
-    //                              this.recipeForm.value['imagePath'],
-    //                              this.recipeForm.value['ingredients']);
     if (this.editMode){
       this.recipeService.updateRecipe(this.id, this.recipeForm.value);
     }else {
@@ -83,6 +79,7 @@ export class RecipeEditComponent implements OnInit {
               'name': new FormControl(ingredient.name, Validators.required),
               'amount': new FormControl(ingredient.amount, [
                 Validators.required,
+                //only positive numbers
                 Validators.pattern(/^[1-9]+[0-9]*$/)
               ])
             })

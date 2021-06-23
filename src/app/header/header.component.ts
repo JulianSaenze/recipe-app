@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //receives user object
     //
     this.userSub = this.authService.user.subscribe(user => {
-      //user is null when not logged in or exists when we are logged in
+      //user is null when not logged in or exists when logged in
       //shortcut !!user
       this.isAuthenticated = !user ? false : true;
     });

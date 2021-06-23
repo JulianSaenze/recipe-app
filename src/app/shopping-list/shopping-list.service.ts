@@ -24,9 +24,6 @@ export class ShoppingListService {
       }
 
       addIngredients(ingredients: Ingredient[]) {
-        //   for (let ingredient of ingredients) {
-        //       this.addIngredient
-        //   }
 
         //spread-operator (...): to transform an array into a list, where single items are pushed to the other array
         this.ingredients.push(...ingredients);

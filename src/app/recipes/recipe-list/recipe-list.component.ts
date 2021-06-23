@@ -12,7 +12,7 @@ import { RecipeService } from '../recipe.service';
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
-  subscription: Subscription
+  subscription: Subscription;
 
   //need to inform Router about current Route (ActivatedRoute) if working with relative paths
   constructor(private recipeService: RecipeService,
@@ -21,10 +21,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.recipeService.recipesChanged
-      .subscribe(
-        (recipes: Recipe[]) => {
-          this.recipes = recipes;
-        }
+    .subscribe(
+      (recipes: Recipe[]) => {
+        this.recipes = recipes;
+      }
       );
     this.recipes = this.recipeService.getRecipes();
   }
